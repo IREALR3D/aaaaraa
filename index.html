@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Alanoud Website</title>
+  <style>
+    /* أنماط متصفح محسنة */
+    header {
+      background: linear-gradient(135deg, #3a6cf4 0%, #2a56d4 100%);
+      padding: 15px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+    
+    header.scrolled {
+      padding: 10px 30px;
+      background: rgba(58, 108, 244, 0.95);
+      backdrop-filter: blur(10px);
+    }
+    
+    .logo {
+      color: white;
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+    
+    .navigation {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .navigation a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 500;
+      padding: 8px 15px;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .navigation a::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: white;
+      transition: width 0.3s ease;
+    }
+    
+    .navigation a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    
+    .navigation a:hover::before {
+      width: 70%;
+    }
+    
+    .navigation a.active {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .navigation a.active::before {
+      width: 70%;
+    }
+    
+    /* تعديلات لضمان عمل الروابط الداخلية */
+    section {
+      padding: 100px 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .main {
+      padding-top: 150px;
+    }
+    
+    /* بقية الأنماط كما هي */
+    .theme-toggle, .language-toggle {
+      position: fixed;
+      right: 20px;
+      padding: 10px;
+      background: #3a6cf4;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 1000;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+    .theme-toggle {
+      bottom: 100px;
+    }
+    .language-toggle {
+      bottom: 30px;
+    }
+    .theme-toggle:hover, .language-toggle:hover {
+      background: #2a56d4;
+      transform: scale(1.1);
+    }
+    body.dark-mode {
+      background-color: #121212;
+      color: #ffffff;
+    }
+    body.dark-mode header {
+      background-color: #1e1e1e;
+    }
+    body.dark-mode .card {
+      background-color: #1e1e1e;
+      box-shadow: 0 5px 15px rgba(255,255,255,0.1);
+    }
+    body.dark-mode .project-card {
+      background-color: #1e1e1e;
+    }
+    h2.title, section.main h2, section.main h3 {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s forwards;
+    }
+    section.main h3 {
+      animation-delay: 0.3s;
+    }
+    section.main h2 {
+      animation-delay: 0.6s;
+    }
+    h2.title {
+      animation-delay: 0.4s;
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .card, .project-card {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.6s ease-out;
+    }
+    .card.visible, .project-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .main-btn {
+      display: inline-block;
+      padding: 12px 25px;
+      background-color: #3a6cf4;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .main-btn:hover {
+      background-color: #2a56d4;
+      transform: scale(1.05);
+    }
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 20px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .navigation {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+        display: none;
+      }
+      
+      .navigation.active {
+        display: flex;
+      }
+      
+      .navigation a {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+      }
+      
+      .menu-toggle {
+        display: block;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        align-self: flex-end;
+      }
+      
+      .cards .content, .projects .content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      section {
+        padding: 80px 0;
+      }
+      
+      .main {
+        padding-top: 120px;
+      }
+    }
+    
+    /* إضافة زر القائمة للجوال */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
+  </button>
+  <button class="language-toggle" id="languageToggle">
+    <i class="fas fa-language"></i>
+  </button>
+
+  <header id="mainHeader">
+    <a href="#" class="logo" data-en="Alanoud Alamri" data-ar="العنود العمري">Alanoud Alamri</a>
+    <button class="menu-toggle" id="menuToggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    <nav class="navigation" id="mainNav">
+      <a href="#services" data-en="Academic Qualifications" data-ar="المؤهلات العلمية">Academic Qualifications</a>
+      <a href="#projects" data-en="Projects" data-ar="مشاريعي">Projects</a>
+      <a href="#contact" data-en="Contact" data-ar="اتصل بي">Contact</a>
+    </nav>
+  </header>
+
+  <section class="main">
+    <div>
+      <h2 data-en="Hello I'm Alanoud<br><span>Human Resources Specialist</span>" data-ar="مرحباً أنا العنود<br><span>أخصائية موارد بشرية</span>">Hello I'm Alanoud<br><span>Human Resources Specialist</span></h2>
+      <h3 data-en="I aim to implement HR policies fairly and professionally." data-ar="أسعى لتطبيق سياسات الموارد البشرية بعدالة واحترافية">I aim to implement HR policies fairly and professionally.</h3>
+      
+      <a href="https://raw.githubusercontent.com/IREALR3D/aa/main/Cv%20Arabic.pdf" target="_blank" class="main-btn" data-en="View My CV" data-ar="عرض سيرتي">View My CV</a>
+      
+      <div class="social-icons">
+        <a href="https://www.linkedin.com/in/raad-alamri-737553346/" target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+        <a href="https://x.com/3Mjk" target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-x-twitter"></i>
+        </a>
+        <a href="https://www.instagram.com/t.58/?hl=ar" target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a href="https://oneline-sa.com/ar/" target="_blank" rel="noopener noreferrer">
+          <i class="fa-solid fa-store"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="cards" id="services">
+    <h2 class="title" data-en="Academic Qualifications" data-ar="المؤهلات العلمية">Academic Qualifications</h2>
+    <div class="content">
+      <div class="card">
+        <div class="icon">
+          <i class="fa-solid fa-user-graduate"></i>
+        </div>
+        <div class="info">
+          <h3 data-en="Master's degree in Human Resources Management" data-ar="ماجستير في ادارة الموارد البشرية">Master's degree in Human Resources Management</h3>
+          <p data-en="University of Jeddah - Graduated with First Class Honors, GPA: 4.96 out of 5." data-ar="جامعة جده-بتقدير ممتاز مع مرتبة الشرف الاولى بمعدل 4.96 من 5.">University of Jeddah - Graduated with First Class Honors, GPA: 4.96 out of 5.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div class="info">
+          <h3 data-en="Bachelor's degree in Management Information Systems" data-ar="بكالوريوس في نظم المعلومات الادارية">Bachelor's degree in Management Information Systems</h3>
+          <p data-en="Aisal University - Graduated with Honors, GPA: 4.59 out of 5." data-ar="جامعة الفيصل - بتقدير ممتاز مع مرتبة الشرف بمعدل 4,59 من 5.">Aisal University - Graduated with Honors, GPA: 4.59 out of 5.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="projects" id="projects">
+    <h2 class="title" data-en="Projects" data-ar="مشاريعي">Projects</h2>
+    <div class="content">
+      <div class="project-card">
+        <div class="project-image">
+          <img src="image/IJRSP.png" />
+        </div>
+        <div class="project-info">
+          <p class="project-category" data-en="To view the research, click here." data-ar="لمشاهدة البحث اضغط هنا">To view the research, click here.</p>
+          <strong class="project-title">
+            <span data-en="My master's research was published in the International Journal of Research and Studies under the title: &quot;The Impact of Work Environment Quality on Employee Performance in Public Universities in the Kingdom of Saudi Arabia.&quot;" data-ar="تم نشر بحثي للماجستير في المجلة الدولية للنشر البحوث والدراسات بعنوان اثر جودة بيئة العمل على اداء العاملين في الجامعات الحكومية بالمملكة العربية السعودية ">My master's research was published in the International Journal of Research and Studies under the title: "The Impact of Work Environment Quality on Employee Performance in Public Universities in the Kingdom of Saudi Arabia."</span>
+            <a href="https://www.ijrsp.com/volume/issue-27/9/" class="more-details" data-en="more details" data-ar="مزيد من التفاصيل">more details</a>
+          </strong>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-image">
+          <img src="image/pnXqtxqE_400x400.png" />
+        </div>
+        <div class="project-info">
+          <p class="project-category" data-en="To view the research, click here" data-ar="لمشاهدة البحث اضغط هنا">To view the research, click here</p>
+          <strong class="project-title">
+            <span data-en="Certified Business Professional in Administrative Leadership CBP-L" data-ar="CBP-L شهادة محترف الاعمال المعتمدة في القيادة الادارية ">Certified Business Professional in Administrative Leadership CBP-L</span>
+            <a href="https://raw.githubusercontent.com/IREALR3D/aa/main/document%20-%202024-08-26T151457.784%202.pdf" class="more-details" data-en="more details" data-ar="مزيد من التفاصيل">more details</a>
+          </strong>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="cards" id="contact">
+  <h2 class="title" data-en="Something on your mind? Let's talk" data-ar="لديك استفسار؟ دعنا نتحدث">Something on your mind? Let's talk</h2>
+  <div class="content">
+
+  </div>
+</section>
+
+
+  <section class="cards" id="contact">
+    <h2 class="title" data-en="Something on your mind? Let's talk" data-ar="لديك استفسار؟ دعنا نتحدث">Something on your mind? Let's talk</h2>
+    <div class="content">
+      <div class="card">
+        <div class="icon">
+          <i class="fa-regular fa-envelope"></i>
+        </div>
+        <div class="info">
+          <h3 data-en="My Email" data-ar="بريدي الإلكتروني">My Email</h3>
+          <p>alanoud-5678@hotmail.com</p>
+        </div>
+        
+      </div>
+
+      <div class="card">
+        <div class="icon">
+          <i class="fa-solid fa-phone"></i>
+        </div>
+        <div class="info">
+          <h3 data-en="Phone number" data-ar="رقم التواصل">Phone number</h3>
+          <p>0556259439</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+  <script>
+    // إضافة تأثير التمرير للمتصفح
+    const header = document.getElementById('mainHeader');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+      
+      // تحديث الروابط النشطة
+      updateActiveLink();
+    });
+    
+    // إضافة تفاعل القائمة للجوال
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+    
+    menuToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('active');
+    });
+    
+    // إغلاق القائمة عند النقر على رابط
+    document.querySelectorAll('.navigation a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          mainNav.classList.remove('active');
+        }
+        
+        // الانتقال السلس إلى القسم المطلوب
+        const targetId = link.getAttribute('href');
+        if (targetId.startsWith('#')) {
+          e.preventDefault();
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        }
+      });
+    });
+    
+    // تحديث الرابط النشط بناءً على الموقع الحالي
+    function updateActiveLink() {
+      const scrollPosition = window.scrollY + 100;
+      
+      document.querySelectorAll('section').forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+        const sectionId = section.getAttribute('id');
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          document.querySelectorAll('.navigation a').forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${sectionId}`) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }
+    
+    // بقية الأكواد كما هي
+    const themeToggle = document.getElementById('themeToggle');
+    const languageToggle = document.getElementById('languageToggle');
+    const body = document.body;
+    let currentLang = 'en';
+
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      const icon = themeToggle.querySelector('i');
+      if (body.classList.contains('dark-mode')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
+    });
+
+    languageToggle.addEventListener('click', () => {
+      currentLang = currentLang === 'en' ? 'ar' : 'en';
+      document.documentElement.lang = currentLang;
+      document.body.style.direction = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+      document.querySelectorAll('[data-en][data-ar]').forEach(element => {
+        const newContent = element.getAttribute(`data-${currentLang}`);
+        if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+          element.placeholder = newContent;
+        } else {
+          element.innerHTML = newContent;
+        }
+      });
+    });
+
+    function isElementInViewport(el) {
+      const rect = el.getBoundingClientRect();
+      return (
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) - 100
+      );
+    }
+
+    function checkVisibility() {
+      document.querySelectorAll('.card, .project-card').forEach(el => {
+        if (isElementInViewport(el)) {
+          el.classList.add('visible');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', checkVisibility);
+    window.addEventListener('load', () => {
+      checkVisibility();
+      document.querySelectorAll('h2.title, section.main h2, section.main h3').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      });
+      
+      // تحديث الرابط النشط عند التحميل
+      updateActiveLink();
+    });
+  </script>
+</body>
+</html>
