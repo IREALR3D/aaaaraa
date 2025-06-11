@@ -7,6 +7,257 @@
   <link rel="stylesheet" href="style.css" />
   <title>Alanoud Website</title>
   <style>
+    header {
+  background: linear-gradient(135deg, #3a6cf4 0%, #2a56d4 100%);
+  padding: 15px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+header.scrolled {
+  padding: 10px 30px;
+  background: rgba(58, 108, 244, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+.navigation {
+  display: flex;
+  gap: 30px;
+}
+
+.navigation a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 8px 15px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.navigation a::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: white;
+  transition: width 0.3s ease;
+}
+
+.navigation a:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.navigation a:hover::before {
+  width: 70%;
+}
+
+.navigation a.active {
+  background: rgba(255,255,255,0.2);
+}
+
+.navigation a.active::before {
+  width: 70%;
+}
+
+section {
+  padding: 100px 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.main {
+  padding-top: 150px;
+}
+
+.theme-toggle, .language-toggle {
+  position: fixed;
+  right: 20px;
+  padding: 10px;
+  background: #3a6cf4;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle {
+  bottom: 100px;
+}
+
+.language-toggle {
+  bottom: 30px;
+}
+
+.theme-toggle:hover, .language-toggle:hover {
+  background: #2a56d4;
+  transform: scale(1.1);
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+body.dark-mode header {
+  background-color: #1e1e1e;
+}
+
+body.dark-mode .card {
+  background-color: #1e1e1e;
+  box-shadow: 0 5px 15px rgba(255,255,255,0.1);
+}
+
+body.dark-mode .project-card {
+  background-color: #1e1e1e;
+}
+
+h2.title, section.main h2, section.main h3 {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s forwards;
+}
+
+section.main h3 {
+  animation-delay: 0.3s;
+}
+
+section.main h2 {
+  animation-delay: 0.6s;
+}
+
+h2.title {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card, .project-card {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.6s ease-out;
+}
+
+.card.visible, .project-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.main-btn {
+  display: inline-block;
+  padding: 12px 25px;
+  background-color: #3a6cf4;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.main-btn:hover {
+  background-color: #2a56d4;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 15px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navigation {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    display: none;
+    background: rgba(58, 108, 244, 0.95);
+    border-radius: 10px;
+    padding: 15px 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+
+  .navigation.active {
+    display: flex;
+  }
+
+  .navigation a {
+    width: 100%;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 1.2rem;
+    border-radius: 0;
+  }
+
+  .menu-toggle {
+    display: block;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    align-self: flex-end;
+    margin-top: 5px;
+  }
+
+  .cards .content, .projects .content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  section {
+    padding: 80px 15px;
+  }
+
+  .main {
+    padding-top: 120px;
+  }
+}
+
     /* أنماط متصفح محسنة */
     header {
       background: linear-gradient(135deg, #3a6cf4 0%, #2a56d4 100%);
